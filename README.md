@@ -88,7 +88,7 @@ player.send {
 }
 ```
 
-See more examples with a comparison to the original components in the [test folder](https://github.com/atlasisles/adventure-kt/blob/main/test/src/main/kotlin/ink/pmc/advkt).
+See more examples with a comparison to the original components in the [test folder](https://github.com/atlasisles/adventure-kt/tree/master/test/src/main/kotlin/com/atlasisles/adventurekt).
 
 ## 🌈 Colours
 
@@ -99,7 +99,7 @@ These aren't included by default as Atlas Isles has a custom colour palette.
 Text { "Hello, world!" } color red    // instead of `color NamedTextColor.RED`
 ```
 
-Here's a file containing variables for all base Minecraft colours which you can add to your project: [BaseColors.kt](https://github.com/atlasisles/adventure-kt/blob/main/test/src/main/kotlin/ink/pmc/advkt/BaseColors.kt)
+Here's a file containing variables for all base Minecraft colours which you can add to your project: [BaseColors.kt](https://github.com/atlasisles/adventure-kt/tree/master/test/src/main/kotlin/com/atlasisles/adventurekt/BaseColors.kt)
 
 There are also functions for creating colours from other values, like `rgb(r:Int, g:Int, b:Int)`, `hex(String)` and `rgb(Int)`
 
@@ -114,4 +114,4 @@ Text { "Rainbow!" } color gradient(red, gold, yellow, aqua, blue, lightPurple)
 ## 🛫 Performance
 
 From my small amount of testing comparing the same components to adventure, they seem to have similar performance.
-You can test this for yourself in the test folder, running both `ComponentKtTest` and `OriginalComponentTest`, but it's worth it to no longer be stuck in .append hell. 
+You can test this for yourself in the test folder, running both `ComponentKtTest` and `OriginalComponentTest`, but I think it's worth it for the developer experience. 
