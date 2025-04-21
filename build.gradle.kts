@@ -1,5 +1,4 @@
 plugins {
-    id("com.vanniktech.maven.publish") version "0.31.0"
     alias(libs.plugins.kotlin.jvm)
 }
 
