@@ -1,5 +1,4 @@
 import com.vanniktech.maven.publish.SonatypeHost
-import java.net.URI
 
 plugins {
     id("com.vanniktech.maven.publish") version "0.31.0"
