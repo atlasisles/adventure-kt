@@ -7,7 +7,7 @@ plugins {
 
 mavenPublishing {
     if (project.name != "core") return@mavenPublishing
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     signAllPublications()
 
     coordinates("com.atlasisles", "adventure-kt", version.toString())
