@@ -1,80 +1,117 @@
-# adventure-kt
+# Adventure Kotlin Extensions
 
-**English** | [简体中文](https://github.com/PlutoProject/adventure-kt/blob/master/README_CN.md)
+Original project: [Pluto-Studio/adventure-kt](https://github.com/Pluto-Studio/adventure-kt)
 
 > [!WARNING]
 >
-> This project is still **working in progress**.
->
-> Some interfaces may not work / change in the future.
->
-> Use it as your own risk.
+> This project was made for use in Atlas Isles projects, but is welcome to be used elsewhere.
+> Some features may be missing, use this at your own risk!
 
-⛏️ Full Kotlin support for [Kyori Adventure](https://github.com/KyoriPowered/adventure).
+Using Kotlin's extensions and infix functions, this project extends the [adventure UI library](https://github.com/KyoriPowered/adventure)
+with a more Kotlin-like (similar to Jetpack Compose) syntax.
 
-## 🤔 purpose
+- Build components with multiple objects without append
+- Style with infix function (like 'color red with underline')
+- Conditionally show objects in components
+- Extend with custom components for reusability
 
-Since Kotlin brought us the ability to create [Extensions](https://kotlinlang.org/docs/extensions.html), we can create DSLs.
+## 📦 Packages
 
-This project aimed to create many DSL utilities for adventure's builder pattern API, which make your life easier.
+Get from Maven Central:
+```kotlin
+implementation("com.atlasisles:adventure-kt:0.1.0")
+```
 
-## 📦 artifacts
+## 🍿 Examples
 
-###  repository
+Create components using a more Kotlin-like syntax:
 
 ```kotlin
-repositories {
-    maven(uri("https://maven.nostal.ink/repository/maven-public/"))
+/*  With   */
+
+Component {
+    Text { "Hello world!" } color NamedTextColor.RED with bold // infix syntax for styles
+    Text { "Hello green world!" } color NamedTextColor.GREEN   // multiple lines without .append
+}
+
+/* Without */
+
+Component.empty() // append to empty to not keep style
+    .append(Component.text("Hello world!").color(NamedTextColor.RED).decorate(TextDecoration.BOLD))
+    .append(Component.text("Hello green world!").color(NamedTextColor.GREEN))
+```
+
+Easily add logic to your components:
+
+```kotlin
+val show = Random.nextBoolean()
+
+/*  With   */
+
+Component {
+    Text { "This text will always show" } with bold
+    if (show)
+        Text { "This text will sometimes show" } with italic
+}
+
+/* Without */
+
+val conditional = mutableListOf(Component.text("This text will always show")
+    .decorate(TextDecoration.BOLD))
+
+if (show) conditional.add(Component.text("This text will sometimes show")
+    .decorate(TextDecoration.ITALIC))
+
+Component.join(JoinConfiguration.newlines(), conditionalText)
+```
+
+Click & hover actions and other text types:
+
+```kotlin
+Component {
+    Text { "Hover or click me" } with underline onHover showText {
+        Text { "To read me" }
+    } onClick openUrl("https://google.com")
+    
+    Translatable { "accessibility.onboarding.screen.title" } // Welcome to Minecraft! [...]
+    Keybind { "key.inventory" } // E
+    MiniMessage { "<rainbow>Shiny!!" } // Shiny!!
+    Raw { Component.text("Original syntax").color(NamedTextColor.BLUE) } // Original syntax
 }
 ```
 
-### dependency
+Extensions for audiences:
 
 ```kotlin
-dependencies {
-    // Use shadowJar to shade the artifact into your jar
-    api("ink.pmc.advkt:core:1.0.0-SNAPSHOT")
-}
-
-tasks.shadowJar {
-    relocate("ink.pmc.advkt", "com.example.libs.advkt")
-}
-```
-
-## ☕ examples
-
-### creating a component
-
-```kotlin
-component {
-    text("This is a text component, nothing special.")
-    text("This is a colorized text component.") with red()
-    text("This is a colorized text component.") with color(249, 226, 145) // support RGB and hex color
-    newline()
-    text("This is a styled text component.") with bold() without italic()
-}
-
-// you can also use the following syntax
 player.send {
-    text("This is a text component, nothing special.")
+    Text { "${sender.name} invited you to a party" } color NamedTextColor.GOLD
 }
 ```
 
-### creating a title
+See more examples with a comparison to the original components in the [test folder](https://github.com/atlasisles/adventure-kt/blob/main/test/src/main/kotlin/ink/pmc/advkt).
+
+## 🌈 Colours
+
+Whilst you can use `NamedTextColor` with these components, it may be best to add your own colour variables.
+These aren't included by default as Atlas Isles has a custom colour palette.
 
 ```kotlin
-title {
-    mainTitle {
-        text("This is a main title.")
-    }
-    subTitle {
-        text("This is a sub title.")
-    }
-    // support both Kotlin duration and Java duration
-    times {
-        fadeIn(1.seconds)
-        stay(1.seconds)
-        fadeOut(1.seconds)
-    }
-}
+Text { "Hello, world!" } color red    // instead of `color NamedTextColor.RED`
 ```
+
+Here's a file containing variables for all base Minecraft colours which you can add to your project: [BaseColors.kt](https://github.com/atlasisles/adventure-kt/blob/main/test/src/main/kotlin/ink/pmc/advkt/BaseColors.kt)
+
+There are also functions for creating colours from other values, like `rgb(r:Int, g:Int, b:Int)`, `hex(String)` and `rgb(Int)`
+
+### Gradients
+
+Create gradients programmatically using the gradient function:
+
+```kotlin
+Text { "Rainbow!" } color gradient(red, gold, yellow, aqua, blue, lightPurple)
+```
+
+## 🛫 Performance
+
+From my small amount of testing comparing the same components to adventure, they seem to have similar performance.
+You can test this for yourself in the test folder, running both `ComponentKtTest` and `OriginalComponentTest`, but it's worth it to no longer be stuck in .append hell. 

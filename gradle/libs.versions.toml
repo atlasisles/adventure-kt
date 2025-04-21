@@ -1,15 +1,15 @@
 [versions]
 kotlin = "2.0.0"
-adventrue = "4.17.0"
+adventure = "4.20.0"
 
 [libraries]
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
-adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventrue" }
-adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventrue" }
-adventure-text-serializer-gson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventrue" }
-adventure-text-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventrue" }
-adventure-text-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventrue" }
-adventure-text-serializer-ansi = { group = "net.kyori", name = "adventure-text-serializer-ansi", version.ref = "adventrue" }
+adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
+adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
+adventure-text-serializer-gson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventure" }
+adventure-text-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
+adventure-text-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
+adventure-text-serializer-ansi = { group = "net.kyori", name = "adventure-text-serializer-ansi", version.ref = "adventure" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin"}
