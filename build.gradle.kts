@@ -1,20 +1,18 @@
-plugins {
-    id("maven-publish")
-    alias(libs.plugins.kotlin.jvm)
-}
+import com.vanniktech.maven.publish.SonatypeHost
+import java.net.URI
 
-fun kt(dep: String): String {
-    return "org.jetbrains.kotlin.$dep"
+plugins {
+    id("com.vanniktech.maven.publish") version "0.31.0"
+    alias(libs.plugins.kotlin.jvm)
 }
 
 allprojects {
     apply {
-        plugin("maven-publish")
-        plugin(kt("jvm"))
+        plugin("org.jetbrains.kotlin.jvm")
     }
 
-    group = "ink.pmc.advkt"
-    version = "1.0.1"
+    group = "com.atlasisles.adventurekt"
+    version = "2.0-SNAPSHOT"
 
     repositories {
         mavenCentral()
@@ -39,31 +37,5 @@ allprojects {
     tasks.compileJava {
         targetCompatibility = "1.8"
         options.encoding = "UTF-8"
-    }
-}
-
-subprojects {
-    publishing {
-        if (project.name == "test"){
-            return@publishing
-        }
-
-        repositories {
-            maven {
-                name = "nostal"
-                url = uri(
-                    if (version.toString().endsWith("SNAPSHOT")) {
-                        "https://maven.nostal.ink/repository/maven-snapshots/"
-                    } else {
-                        "https://maven.nostal.ink/repository/maven-releases/"
-                    }
-                )
-                credentials(PasswordCredentials::class)
-            }
-        }
-
-        publications.create<MavenPublication>("maven") {
-            artifact(tasks.jar)
-        }
     }
 }

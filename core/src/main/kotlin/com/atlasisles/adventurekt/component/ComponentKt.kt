@@ -1,5 +1,6 @@
-package ink.pmc.advkt.component
+package com.atlasisles.adventurekt.component
 
+import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.TextReplacementConfig
@@ -22,32 +23,29 @@ interface ComponentKt {
 }
 
 class TextComponentKt(internal var component: Component) : ComponentKt {
-
     override fun build(): Component {
         return this.component
     }
-
 }
 
 class RootComponentKt : ComponentKt {
-
     internal var miniMessage: MiniMessage = MiniMessage.miniMessage()
     internal var defaults: RootDefaults? = null
     internal var replaces: RootReplaces? = null
     internal var join: JoinConfiguration? = null
-    internal val components: MutableList<ComponentKt> = mutableListOf()
+    val components: MutableList<ComponentKt> = mutableListOf()
 
     infix fun TextComponentKt.with(styleKt: StyleKt): TextComponentKt {
         this.component = this.component.style(styleKt.with(this.component.style()))
         return this
     }
 
-    infix fun TextComponentKt.with(color: TextColor): TextComponentKt {
+    infix fun TextComponentKt.color(color: TextColor): TextComponentKt {
         this.component = this.component.color(color)
         return this
     }
 
-    infix fun TextComponentKt.with(color: GradientColor): TextComponentKt {
+    infix fun TextComponentKt.color(color: GradientColor): TextComponentKt {
         this.component = this@RootComponentKt.miniMessage.deserialize(
             "<gradient${color.buildString()}>${this@RootComponentKt.miniMessage.serialize(this.component)}</gradient>"
         )
@@ -59,12 +57,17 @@ class RootComponentKt : ComponentKt {
         return this
     }
 
-    infix fun TextComponentKt.with(hoverEvent: HoverEvent<*>): TextComponentKt {
+    infix fun TextComponentKt.font(font: Key): TextComponentKt {
+        this.component = this.component.font(font)
+        return this
+    }
+
+    infix fun TextComponentKt.onHover(hoverEvent: HoverEvent<*>): TextComponentKt {
         this.component = this.component.hoverEvent(hoverEvent)
         return this
     }
 
-    infix fun TextComponentKt.with(clickEvent: ClickEvent): TextComponentKt {
+    infix fun TextComponentKt.onClick(clickEvent: ClickEvent): TextComponentKt {
         this.component = this.component.clickEvent(clickEvent)
         return this
     }
@@ -76,11 +79,6 @@ class RootComponentKt : ComponentKt {
 
     infix fun TextComponentKt.without(decoration: TextDecoration): TextComponentKt {
         this.component = this.component.decoration(decoration, false)
-        return this
-    }
-
-    infix fun TextComponentKt.without(color: TextColor): TextComponentKt {
-        this.component = this.component.color(null)
         return this
     }
 
@@ -122,7 +120,6 @@ class RootComponentKt : ComponentKt {
 }
 
 class RootDefaults {
-
     internal var style: Style = Style.empty()
     internal var hoverEvent: HoverEvent<*>? = null
     internal var clickEvent: ClickEvent? = null
@@ -131,7 +128,7 @@ class RootDefaults {
         this.style = styleKt.with(this.style)
     }
 
-    fun with(color: TextColor) {
+    fun color(color: TextColor) {
         this.style = this.style.color(color)
     }
 
@@ -139,11 +136,11 @@ class RootDefaults {
         this.style = this.style.decorate(decoration)
     }
 
-    fun with(hoverEvent: HoverEvent<*>) {
+    fun onHover(hoverEvent: HoverEvent<*>) {
         this.style = this.style.hoverEvent(hoverEvent)
     }
 
-    fun with(clickEvent: ClickEvent) {
+    fun onClick(clickEvent: ClickEvent) {
         this.style = this.style.clickEvent(clickEvent)
     }
 
@@ -154,23 +151,16 @@ class RootDefaults {
     fun without(decoration: TextDecoration) {
         this.style = this.style.decoration(decoration, false)
     }
-
-    fun without(color: TextColor) {
-        this.style = this.style.color(null)
-    }
-
 }
 
 class RootReplaces(
     internal val parent: RootReplaces?,
 ) {
-
     internal var overriden: Boolean = false
     internal val replaces: MutableList<TextReplacementConfig> = mutableListOf()
-
 }
 
-inline fun component(content: RootComponentKt.() -> Unit): Component {
+inline fun Component(content: RootComponentKt.() -> Unit): Component {
     return RootComponentKt().apply(content).build()
 }
 
@@ -186,7 +176,7 @@ fun RootComponentKt.provide(builder: MiniMessage.Builder.() -> Unit) {
     this.miniMessage = MiniMessage.builder().apply(builder).build()
 }
 
-fun RootComponentKt.component(content: RootComponentKt.() -> Unit) {
+fun RootComponentKt.Component(content: RootComponentKt.() -> Unit) {
     val component = RootComponentKt()
     component.miniMessage = this.miniMessage
     component.replaces = this.replaces
@@ -205,98 +195,167 @@ fun RootComponentKt.replacements(content: RootReplaces.() -> Unit) {
     }
 }
 
-fun RootReplaces.replacement(content: TextReplacementConfig.Builder.() -> Unit) {
+fun RootReplaces.Replacement(content: TextReplacementConfig.Builder.() -> Unit) {
     this.replaces.add(TextReplacementConfig.builder().apply(content).build())
 }
 
-fun RootReplaces.override() {
-    this.overriden = true
-}
+val RootReplaces.Override: Unit
+    get() {
+        this.overriden = true
+    }
 
-fun RootComponentKt.raw(text: Component): TextComponentKt {
+fun RootComponentKt.Raw(text: Component): TextComponentKt {
     val component = TextComponentKt(text)
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.text(text: String): TextComponentKt {
+fun RootComponentKt.Text(text: () -> String): TextComponentKt {
+    val component = TextComponentKt(Component.text(text.invoke()))
+    this.components.add(component)
+    return component
+}
+
+fun RootComponentKt.Text(text: () -> String, color: () -> TextColor): TextComponentKt {
+    val component = TextComponentKt(Component.text(text.invoke(), color.invoke()))
+    this.components.add(component)
+    return component
+}
+
+fun RootComponentKt.Text(text: String): TextComponentKt {
     val component = TextComponentKt(Component.text(text))
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.text(text: Char): TextComponentKt {
+fun RootComponentKt.Text(text: String, color: TextColor): TextComponentKt {
+    val component = TextComponentKt(Component.text(text, color))
+    this.components.add(component)
+    return component
+}
+
+fun RootComponentKt.Text(text: Char): TextComponentKt {
     val component = TextComponentKt(Component.text(text))
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.text(text: Boolean): TextComponentKt {
+fun RootComponentKt.Text(text: Char, color: TextColor): TextComponentKt {
+    val component = TextComponentKt(Component.text(text, color))
+    this.components.add(component)
+    return component
+}
+
+fun RootComponentKt.Text(text: Boolean): TextComponentKt {
     val component = TextComponentKt(Component.text(text))
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.text(text: Int): TextComponentKt {
+fun RootComponentKt.Text(text: Boolean, color: TextColor): TextComponentKt {
+    val component = TextComponentKt(Component.text(text, color))
+    this.components.add(component)
+    return component
+}
+
+fun RootComponentKt.Text(text: Int): TextComponentKt {
     val component = TextComponentKt(Component.text(text))
     this.components.add(component)
     return component
 }
 
+fun RootComponentKt.Text(text: Int, color: TextColor): TextComponentKt {
+    val component = TextComponentKt(Component.text(text, color))
+    this.components.add(component)
+    return component
+}
 
-fun RootComponentKt.text(text: Long): TextComponentKt {
+fun RootComponentKt.Text(text: Long): TextComponentKt {
     val component = TextComponentKt(Component.text(text))
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.text(text: Float): TextComponentKt {
+fun RootComponentKt.Text(text: Long, color: TextColor): TextComponentKt {
+    val component = TextComponentKt(Component.text(text, color))
+    this.components.add(component)
+    return component
+}
+
+fun RootComponentKt.Text(text: Float): TextComponentKt {
     val component = TextComponentKt(Component.text(text))
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.text(text: Double): TextComponentKt {
+fun RootComponentKt.Text(text: Float, color: TextColor): TextComponentKt {
+    val component = TextComponentKt(Component.text(text, color))
+    this.components.add(component)
+    return component
+}
+
+fun RootComponentKt.Text(text: Double): TextComponentKt {
     val component = TextComponentKt(Component.text(text))
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.translatable(key: String): TextComponentKt {
+fun RootComponentKt.Text(text: Double, color: TextColor): TextComponentKt {
+    val component = TextComponentKt(Component.text(text, color))
+    this.components.add(component)
+    return component
+}
+
+fun RootComponentKt.Translatable(key: String): TextComponentKt {
     val component = TextComponentKt(Component.translatable(key))
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.keybind(keybind: String): TextComponentKt {
-    val component = TextComponentKt(Component.keybind(keybind))
+fun RootComponentKt.Translatable(key: () -> String): TextComponentKt {
+    val component = TextComponentKt(Component.translatable(key.invoke()))
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.miniMessage(rawText: String): TextComponentKt {
-    val component = TextComponentKt(this.miniMessage.deserialize(rawText))
+fun RootComponentKt.Translatable(fallback: String?, key: () -> String): TextComponentKt {
+    val component = TextComponentKt(Component.translatable(key.invoke(), fallback))
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.newline(): TextComponentKt {
-    val component = TextComponentKt(Component.newline())
+fun RootComponentKt.Keybind(keybind: () -> String): TextComponentKt {
+    val component = TextComponentKt(Component.keybind(keybind.invoke()))
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.empty(): TextComponentKt {
+fun RootComponentKt.MiniMessage(rawText: () -> String): TextComponentKt {
+    val component = TextComponentKt(this.miniMessage.deserialize(rawText.invoke()))
+    this.components.add(component)
+    return component
+}
+
+val RootComponentKt.Newline: TextComponentKt
+    get() {
+        val component = TextComponentKt(Component.newline())
+        this.components.add(component)
+        return component
+    }
+
+val RootComponentKt.Empty: TextComponentKt
+    get() {
     val component = TextComponentKt(Component.empty())
     this.components.add(component)
     return component
 }
 
-fun RootComponentKt.space(): TextComponentKt {
-    val component = TextComponentKt(Component.space())
-    this.components.add(component)
-    return component
-}
+val RootComponentKt.Space: TextComponentKt
+    get() {
+        val component = TextComponentKt(Component.space())
+        this.components.add(component)
+        return component
+    }
 
 fun Component.json(): String {
     return GsonComponentSerializer.gson().serialize(this)

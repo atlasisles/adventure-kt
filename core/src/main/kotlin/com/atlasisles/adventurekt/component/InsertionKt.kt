@@ -1,4 +1,4 @@
-package ink.pmc.advkt.component
+package com.atlasisles.adventurekt.component
 
 fun insertion(): InsertionWithoutKt {
     return InsertionWithoutKt()
