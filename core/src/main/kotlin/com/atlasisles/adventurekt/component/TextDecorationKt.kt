@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.atlasisles.adventurekt.component
 
 import net.kyori.adventure.text.format.TextDecoration

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.atlasisles.adventurekt.component
 
 fun insertion(): InsertionWithoutKt {

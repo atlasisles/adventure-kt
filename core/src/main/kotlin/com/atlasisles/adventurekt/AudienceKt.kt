@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.atlasisles.adventurekt
 
 import com.atlasisles.adventurekt.component.RootComponentKt
