@@ -8,12 +8,11 @@ allprojects {
     }
 
     group = "com.atlasisles.adventurekt"
-    version = "2.1"
+    version = "2.0-SNAPSHOT.2"
 
     repositories {
         mavenCentral()
         mavenLocal()
-        maven(uri("https://maven.nostal.ink/repository/maven-public"))
     }
 
     dependencies {
