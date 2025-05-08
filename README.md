@@ -2,27 +2,36 @@
 
 Original project: [Pluto-Studio/adventure-kt](https://github.com/Pluto-Studio/adventure-kt)
 
-> [!WARNING]
->
+> [!IMPORTANT]
 > This project was made for use in Atlas Isles projects, but is welcome to be used elsewhere.
 > Some features may be missing, use this at your own risk!
 
-Using Kotlin's extensions and infix functions, this project extends the [adventure UI library](https://github.com/KyoriPowered/adventure)
-with a more Kotlin-like (similar to Jetpack Compose) syntax.
+Using Kotlin's extensions and infix functions, this project extends the [Adventure UI library](https://github.com/KyoriPowered/adventure)
+with a more Kotlin-idiomatic (similar to Compose) syntax.
 
-- Build components with multiple objects without append
+- Build components with multiple objects without appending
 - Style with infix function (like 'color red with underline')
 - Conditionally show objects in components
 - Extend with custom components for reusability
 
+---
+
 ## 📦 Packages
 
-Get from Maven Central:
+Currently only available on Maven snapshots:
 ```kotlin
-implementation("com.atlasisles:adventure-kt:0.1.0")
+/*  Add snapshot repository  */
+maven("https://central.sonatype.com/repository/maven-snapshots/") {
+    name = "snapshots"
+}
+
+/*  Add dependency  */
+implementation("com.atlasisles:adventure-kt:2.0-SNAPSHOT")
+/*  or whilst in snapshots, get the latest version:  */
+implementation("com.atlasisles:adventure-kt:2.+")
 ```
 
-## 🍿 Examples
+## Examples
 
 Create components using a more Kotlin-like syntax:
 
@@ -30,15 +39,19 @@ Create components using a more Kotlin-like syntax:
 /*  With   */
 
 Component {
-    Text { "Hello world!" } color NamedTextColor.RED with bold // infix syntax for styles
-    Text { "Hello green world!" } color NamedTextColor.GREEN   // multiple lines without .append
+    text { "Hello world!" } color NamedTextColor.RED with bold // infix syntax for styles
+    text { "Hello green world!" } color NamedTextColor.GREEN   // multiple lines without .append
+    
+    // Optional parametrised syntax
+    text("Hello world!") color NamedTextColor.RED with bold
 }
 
 /* Without */
 
-Component.empty() // append to empty to not keep style
+Component.text()
     .append(Component.text("Hello world!").color(NamedTextColor.RED).decorate(TextDecoration.BOLD))
     .append(Component.text("Hello green world!").color(NamedTextColor.GREEN))
+    .build()
 ```
 
 Easily add logic to your components:
@@ -49,34 +62,50 @@ val show = Random.nextBoolean()
 /*  With   */
 
 Component {
-    Text { "This text will always show" } with bold
-    if (show)
-        Text { "This text will sometimes show" } with italic
+    text { "This text will always show" } with bold
+    if (show) 
+        text { "This text will sometimes show" } with italic
 }
 
 /* Without */
 
-val conditional = mutableListOf(Component.text("This text will always show")
-    .decorate(TextDecoration.BOLD))
+val conditional = Component.text()
+    .content("This text will always show")
 
-if (show) conditional.add(Component.text("This text will sometimes show")
-    .decorate(TextDecoration.ITALIC))
+if (show) conditional.append(
+    Component.text("This text will sometimes show").decorate(TextDecoration.ITALIC)
+)
 
-Component.join(JoinConfiguration.newlines(), conditionalText)
+Component.join(JoinConfiguration.newlines(), conditionalText.build())
 ```
 
 Click & hover actions and other text types:
 
 ```kotlin
 Component {
-    Text { "Hover or click me" } with underline onHover showText {
-        Text { "To read me" }
+    text { "Hover or click me" } with underline onHover showText {
+        text { "To read me" }
     } onClick openUrl("https://google.com")
     
-    Translatable { "accessibility.onboarding.screen.title" } // Welcome to Minecraft! [...]
-    Keybind { "key.inventory" } // E
-    MiniMessage { "<rainbow>Shiny!!" } // Shiny!!
-    Raw { Component.text("Original syntax").color(NamedTextColor.BLUE) } // Original syntax
+    translatable { "accessibility.onboarding.screen.title" } // Welcome to Minecraft! [...]
+    keybind { "key.inventory" } // E
+    miniMessage { "<rainbow>Shiny!!" } // Shiny!!
+    raw { Component.text("Original syntax").color(NamedTextColor.BLUE) } // Original syntax
+}
+```
+
+Create custom components for reusability:
+
+```kotlin
+/*  Create the component  */
+fun RootComponentKt.alert(text: () -> String) = buildCustomComponent {
+    Text { "[ALERT] " } color NamedTextColor.RED with bold
+    Text { text.invoke() } color NamedTextColor.RED
+}
+
+/*  Use it anywhere  */
+Component {
+    alert { "Message" } // [ALERT] Message
 }
 ```
 
@@ -84,11 +113,12 @@ Extensions for audiences:
 
 ```kotlin
 player.send {
-    Text { "${sender.name} invited you to a party" } color NamedTextColor.GOLD
+    text { sender.name } color NamedTextColor.YELLOW
+    text { " invited you to a party" } color NamedTextColor.GOLD
 }
 ```
 
-See more examples with a comparison to the original components in the [test folder](https://github.com/atlasisles/adventure-kt/tree/master/test/src/main/kotlin/com/atlasisles/adventurekt).
+See more examples in the [test folder](https://github.com/atlasisles/adventure-kt/tree/master/test/src/main/kotlin/com/atlasisles/adventurekt).
 
 ## 🌈 Colours
 
@@ -96,7 +126,7 @@ Whilst you can use `NamedTextColor` with these components, it may be best to add
 These aren't included by default as Atlas Isles has a custom colour palette.
 
 ```kotlin
-Text { "Hello, world!" } color red    // instead of `color NamedTextColor.RED`
+text { "Hello, world!" } color red    // instead of `color NamedTextColor.RED`
 ```
 
 Here's a file containing variables for all base Minecraft colours which you can add to your project: [BaseColors.kt](https://github.com/atlasisles/adventure-kt/tree/master/test/src/main/kotlin/com/atlasisles/adventurekt/BaseColors.kt)
@@ -108,10 +138,11 @@ There are also functions for creating colours from other values, like `rgb(r:Int
 Create gradients programmatically using the gradient function:
 
 ```kotlin
-Text { "Rainbow!" } color gradient(red, gold, yellow, aqua, blue, lightPurple)
+text { "Rainbow!" } color gradient(red, gold, yellow, aqua, blue, lightPurple)
 ```
 
 ## 🛫 Performance
 
-From my small amount of testing comparing the same components to adventure, they seem to have similar performance.
-You can test this for yourself in the test folder, running both `ComponentKtTest` and `OriginalComponentTest`, but I think it's worth it for the developer experience. 
+Whilst this library may have overhead on top of adventure, under the hood it uses the more performant `TextComponent.Builder` instead of `Component`, so the performance impact on your project may vary.
+
+You can test this for yourself in the test folder, running both `ComponentKtTest` and `OriginalComponentTest`.
