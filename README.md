@@ -91,6 +91,14 @@ Component {
     keybind { "key.inventory" } // E
     miniMessage { "<rainbow>Shiny!!" } // Shiny!!
     raw { Component.text("Original syntax").color(NamedTextColor.BLUE) } // Original syntax
+    
+    container { /* Contain components and styles */
+        defaults { color(NamedTextColor.RED) }
+        join { separator { Component.newline() } }
+        
+        text { "This is red!" } // This is red!
+        text { "Example on a new line" } // Example on a new line
+    }
 }
 ```
 
@@ -118,7 +126,7 @@ player.send {
 }
 ```
 
-See more examples in the [test folder](https://github.com/atlasisles/adventure-kt/tree/master/test/src/main/kotlin/com/atlasisles/adventurekt).
+See more examples specifically for [custom components here](https://github.com/atlasisles/adventure-kt/tree/master/custom_components.md), and others in the [test folder](https://github.com/atlasisles/adventure-kt/tree/master/test/src/main/kotlin/com/atlasisles/adventurekt).
 
 ## 🌈 Colours
 
