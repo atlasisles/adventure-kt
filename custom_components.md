@@ -2,13 +2,11 @@
 
 This document explains multiple ways to create custom components with adventure-kt to use in your project.
 
----
-
 ### Component types
 
 **Simple custom component**
 
-Using `buildCustomComponent` you can easily create a custom component. These act the same way as putting the components inside directly inline where your custom component is used. Here is an example:
+Using `buildCustomComponent` you can easily create a custom component. Here is an example:
 
 ```kotlin
 /* Create custom component */

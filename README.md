@@ -33,7 +33,7 @@ implementation("com.atlasisles:adventure-kt:2.+")
 
 ## Examples
 
-Create components using a more Kotlin-like syntax:
+**Create components using a more Kotlin-like syntax:**
 
 ```kotlin
 /*  With   */
@@ -54,7 +54,7 @@ Component.text()
     .build()
 ```
 
-Easily add logic to your components:
+**Easily add logic to your components:**
 
 ```kotlin
 val show = Random.nextBoolean()
@@ -79,7 +79,7 @@ if (show) conditional.append(
 Component.join(JoinConfiguration.newlines(), conditionalText.build())
 ```
 
-Click & hover actions and other text types:
+**Click & hover actions and other text types:**
 
 ```kotlin
 Component {
@@ -102,7 +102,7 @@ Component {
 }
 ```
 
-Create custom components for reusability:
+**Create custom components for reusability:**
 
 ```kotlin
 /*  Create the component  */
@@ -117,7 +117,9 @@ Component {
 }
 ```
 
-Extensions for audiences:
+More examples and documentation on custom components can be [found here](https://github.com/atlasisles/adventure-kt/tree/master/custom_components.md).
+
+**Extensions for audiences:**
 
 ```kotlin
 player.send {
