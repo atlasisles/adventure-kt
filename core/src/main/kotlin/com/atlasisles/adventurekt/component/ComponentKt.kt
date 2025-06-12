@@ -35,6 +35,7 @@ class RootComponentKt : ComponentKt {
     internal var replaces: RootReplaces? = null
     internal var join: JoinConfiguration? = null
     val components: MutableList<ComponentKt> = mutableListOf()
+    var theme: RootTheme = RootTheme()
 
     infix fun TextComponentKt.with(styleKt: StyleKt): TextComponentKt {
         this.component = this.component.style(styleKt.with(this.component.style()))
@@ -165,6 +166,10 @@ inline fun Component(content: RootComponentKt.() -> Unit): Component {
 
 fun RootComponentKt.defaults(content: RootDefaults.() -> Unit) {
     this.defaults = RootDefaults().apply(content)
+}
+
+fun RootComponentKt.theme(content: RootTheme.() -> Unit) {
+    this.theme = RootTheme().apply(content)
 }
 
 fun RootComponentKt.provide(miniMessage: MiniMessage) {

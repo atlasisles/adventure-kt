@@ -169,4 +169,54 @@ fun main() {
     }
 
     print(rootComponents.json())
+
+    /* Theme test */
+    fun RootComponentKt.rankPrefix(rank: String) = buildCustomRootComponent { // themes work best on root components
+        when (rank) {
+            "DEFAULT" -> {
+                this.theme {
+                    primaryColour = white
+                    secondaryColour = gray
+                }
+                text { "" } color theme.primaryColour
+            }
+            "VIP" -> {
+                this.theme {
+                    primaryColour = green
+                    secondaryColour = gray
+                }
+                text { "[VIP] " } color theme.primaryColour
+            }
+            "MVP" -> {
+                this.theme {
+                    primaryColour = gold
+                    secondaryColour = white
+                }
+                text { "[MVP] " } color theme.primaryColour
+            }
+        }
+    }
+
+    val themedComponents = Component {
+        newline()
+        join { separator { Component.newline() } }
+
+        container {
+            rankPrefix("DEFAULT")
+            text { "<Alex> " } color theme.primaryColour
+            text { "example default rank" } color theme.secondaryColour
+        }
+        container {
+            rankPrefix("VIP")
+            text { "<Zuri> " } color theme.primaryColour
+            text { "example vip rank" } color theme.secondaryColour
+        }
+        container {
+            rankPrefix("MVP")
+            text { "<Sunny> " } color theme.primaryColour
+            text { "example mvp rank" } color theme.secondaryColour
+        }
+    }
+
+    print(themedComponents.ansi())
 }
