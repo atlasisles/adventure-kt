@@ -26,7 +26,7 @@ maven("https://central.sonatype.com/repository/maven-snapshots/") {
 }
 
 /*  Add dependency  */
-implementation("com.atlasisles:adventure-kt:2.2-SNAPSHOT")
+implementation("com.atlasisles:adventure-kt:2.3-SNAPSHOT")
 /*  or whilst in snapshots, get the latest version:  */
 implementation("com.atlasisles:adventure-kt:2.+")
 ```
