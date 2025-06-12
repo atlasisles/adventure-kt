@@ -131,7 +131,15 @@ fun main() {
         return timed
     }
 
-    print("\nOther tests not included in timings:\n\n")
+    val results: MutableList<Duration> = mutableListOf()
+    repeat(50) {
+        results.add(test())
+    }
+
+    print("\n------------\n\nRan test 50 times:\n\n")
+    print("Average time: ${results.map { it.inWholeMicroseconds }.average() / 1000}ms\n")
+    print("Total time: ${results.sumOf { it.inWholeMicroseconds } / 1000}ms\n")
+    print("\n------------\n\nOther tests not included in timings:\n")
 
     /* Create reusable components */
     fun RootComponentKt.alert(message: () -> String) = buildCustomComponent {
@@ -145,14 +153,20 @@ fun main() {
         newline()
     }
 
-    print(usingComponents.ansi())
+    print(usingComponents.json())
+    print("\n")
 
-    val results: MutableList<Duration> = mutableListOf()
-    repeat(50) {
-        results.add(test())
+    /* Root component */
+    fun RootComponentKt.rootAlert(message: () -> String) = buildCustomRootComponent {
+        text { "ALERT: " } color red with bold
+        text { message.invoke() } color red
     }
 
-    print("\n\n------------\n\nRan test 50 times:\n\n")
-    print("Average time: ${results.map { it.inWholeMicroseconds }.average() / 1000}ms\n")
-    print("Total time: ${results.sumOf { it.inWholeMicroseconds } / 1000}ms\n")
+    val rootComponents = Component {
+        newline()
+        rootAlert { "Alert message at root" }
+        newline()
+    }
+
+    print(rootComponents.json())
 }
