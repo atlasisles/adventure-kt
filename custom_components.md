@@ -88,7 +88,7 @@ Component {
 /* RESULT */
 Component {
     defaults { color(NamedTextColor.RED) }
-    text { "❤ " } // this heart is red as expected
+    text { "❤ " } // the heart is red as expected
     
     text { "example" } // this time, the text is also red
 }

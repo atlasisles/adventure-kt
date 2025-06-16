@@ -1,9 +1,9 @@
 name: Publish to Maven Central
 
 on:
-  release:
-    types:
-      - published
+  push:
+    branches:
+      - master
 
 jobs:
   publish:
@@ -24,8 +24,7 @@ jobs:
       - name: Publish package
         run: ./gradlew publish
         env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_ID }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_atlasislesReleasesUsername: ${{ secrets.MAVEN_USERNAME }}
+          ORG_GRADLE_PROJECT_atlasislesReleasesPassword: ${{ secrets.MAVEN_PASSWORD }}
+          ORG_GRADLE_PROJECT_atlasislesSnapshotsUsername: ${{ secrets.MAVEN_USERNAME }}
+          ORG_GRADLE_PROJECT_atlasislesSnapshotsPassword: ${{ secrets.MAVEN_PASSWORD }}

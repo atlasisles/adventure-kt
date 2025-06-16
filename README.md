@@ -18,17 +18,16 @@ with a more Kotlin-idiomatic (similar to Compose) syntax.
 
 ## 📦 Packages
 
-Currently only available on Maven snapshots:
+Get from the Atlas Isles snapshot repository:
 ```kotlin
-/*  Add snapshot repository  */
-maven("https://central.sonatype.com/repository/maven-snapshots/") {
-    name = "snapshots"
+/*  Add repository  */
+maven {
+    name = "atlasisles"
+    url = uri("https://mvn.atlasisles.com/snapshots")
 }
 
 /*  Add dependency  */
-implementation("com.atlasisles:adventure-kt:2.3-SNAPSHOT")
-/*  or whilst in snapshots, get the latest version:  */
-implementation("com.atlasisles:adventure-kt:2.+")
+implementation("com.atlasisles:adventure-kt:2.4-SNAPSHOT")
 ```
 
 ## Examples
