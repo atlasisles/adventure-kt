@@ -8,7 +8,7 @@ allprojects {
     }
 
     group = "com.atlasisles.adventurekt"
-    version = "2.4-SNAPSHOT"
+    version = "2.5-SNAPSHOT"
 
     repositories {
         mavenCentral()

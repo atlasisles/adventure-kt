@@ -216,14 +216,19 @@ fun main() {
             text { "<Sunny> " } color theme.primaryColour
             text { "example mvp rank" } color theme.secondaryColour
         }
-        newline()
     }
 
-    print(themedComponents.ansi())
+    println(themedComponents.ansi())
 
     val insertionComponents = Component {
         text { "Shift click this to insert a message into your chat box" } insertion "Hello, world!"
     }
 
-    print(insertionComponents.json())
+    println(insertionComponents.json())
+
+    val customClickEvent = Component {
+        text { "Click me to send a packet to the server!" } onClick custom(Key.key("testing"), "1,2,3")
+    }
+
+    println(customClickEvent.json())
 }

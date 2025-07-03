@@ -27,7 +27,7 @@ maven {
 }
 
 /*  Add dependency  */
-implementation("com.atlasisles:adventure-kt:2.4-SNAPSHOT")
+implementation("com.atlasisles:adventure-kt:2.5-SNAPSHOT")
 ```
 
 ## Examples

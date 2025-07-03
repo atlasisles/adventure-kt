@@ -3,6 +3,8 @@
 package com.atlasisles.adventurekt.component
 
 import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.key.Key
+import net.kyori.adventure.nbt.api.BinaryTagHolder
 import net.kyori.adventure.text.event.ClickCallback
 import net.kyori.adventure.text.event.ClickEvent
 import java.net.URL
@@ -27,10 +29,6 @@ fun suggestCommand(command: String): ClickEvent {
     return ClickEvent.suggestCommand(command)
 }
 
-fun changePage(page: String): ClickEvent {
-    return ClickEvent.changePage(page)
-}
-
 fun changePage(page: Int): ClickEvent {
     return ClickEvent.changePage(page)
 }
@@ -45,4 +43,8 @@ fun callback(function: (Audience) -> Unit): ClickEvent {
 
 fun callback(options: ClickCallback.Options, function: (Audience) -> Unit): ClickEvent {
     return ClickEvent.callback(function, options)
+}
+
+fun custom(id: Key, payload: String = ""): ClickEvent {
+    return ClickEvent.custom(id, BinaryTagHolder.binaryTagHolder(payload))
 }
