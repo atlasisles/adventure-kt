@@ -216,7 +216,14 @@ fun main() {
             text { "<Sunny> " } color theme.primaryColour
             text { "example mvp rank" } color theme.secondaryColour
         }
+        newline()
     }
 
     print(themedComponents.ansi())
+
+    val insertionComponents = Component {
+        text { "Shift click this to insert a message into your chat box" } insertion "Hello, world!"
+    }
+
+    print(insertionComponents.json())
 }

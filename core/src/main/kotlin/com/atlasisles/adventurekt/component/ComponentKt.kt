@@ -64,6 +64,11 @@ class RootComponentKt : ComponentKt {
         return this
     }
 
+    infix fun TextComponentKt.insertion(content: String): TextComponentKt {
+        this.component = this.component.insertion(content)
+        return this
+    }
+
     infix fun TextComponentKt.onHover(hoverEvent: HoverEvent<*>): TextComponentKt {
         this.component = this.component.hoverEvent(hoverEvent)
         return this
