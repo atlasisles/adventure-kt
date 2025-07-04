@@ -9,12 +9,14 @@ import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
+import net.kyori.adventure.text.serializer.json.JSONOptions
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.kyori.ansi.ColorLevel
@@ -66,6 +68,11 @@ class RootComponentKt : ComponentKt {
 
     infix fun TextComponentKt.insertion(content: String): TextComponentKt {
         this.component = this.component.insertion(content)
+        return this
+    }
+
+    infix fun TextComponentKt.shadowColor(color: ShadowColor): TextComponentKt {
+        this.component = this.component.shadowColor(color)
         return this
     }
 

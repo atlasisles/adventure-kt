@@ -3,6 +3,8 @@ package com.atlasisles.adventurekt
 import com.atlasisles.adventurekt.component.*
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import kotlin.random.Random
 import kotlin.time.Duration
@@ -231,4 +233,10 @@ fun main() {
     }
 
     println(customClickEvent.json())
+
+    val shadowColor = Component {
+        text { "Shadow color from adventure" } shadowColor ShadowColor.shadowColor(NamedTextColor.RED, 255)
+    }
+
+    println(shadowColor.json())
 }
