@@ -16,7 +16,6 @@ import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
-import net.kyori.adventure.text.serializer.json.JSONOptions
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.kyori.ansi.ColorLevel
@@ -25,7 +24,7 @@ interface ComponentKt {
     fun build(): Component
 }
 
-class TextComponentKt(internal var component: Component) : ComponentKt {
+class TextComponentKt(var component: Component) : ComponentKt {
     override fun build(): Component {
         return this.component
     }
