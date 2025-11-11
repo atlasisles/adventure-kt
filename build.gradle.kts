@@ -8,11 +8,10 @@ allprojects {
     }
 
     group = "com.atlasisles.adventurekt"
-    version = "2.7-SNAPSHOT"
+    version = "2.7.1-SNAPSHOT"
 
     repositories {
         mavenCentral()
-        mavenLocal()
     }
 
     dependencies {
@@ -26,11 +25,6 @@ allprojects {
     }
 
     kotlin {
-        jvmToolchain(8)
-    }
-
-    tasks.compileJava {
-        targetCompatibility = "1.8"
-        options.encoding = "UTF-8"
+        jvmToolchain(21)
     }
 }

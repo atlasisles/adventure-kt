@@ -1,6 +1,6 @@
 [versions]
-kotlin = "2.2.0"
-adventure = "4.23.0"
+kotlin = "2.2.20"
+adventure = "4.25.0"
 
 [libraries]
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }

@@ -6,6 +6,8 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
+import net.kyori.adventure.text.`object`.PlayerHeadObjectContents
+import java.util.UUID
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.measureTime
@@ -111,7 +113,7 @@ fun main() {
                 newline()
             }
 
-            print(newTest.ansi())
+            println(newTest.ansi())
 
             /* Conditional text */
             val show: Boolean = Random.nextBoolean()
@@ -125,10 +127,20 @@ fun main() {
                 }
             }
 
-            print(conditionalText.ansi())
+            println(conditionalText.ansi())
+
+            val objcts = Component {
+                playerHead(UUID.randomUUID(), true)
+                playerHead("Steve", false) shadowColor ShadowColor.none()
+                playerHead(PlayerHeadObjectContents.property("textures", "ewogICJ0aW1lc3RhbXAiIDogMTc2MjE1MTMwOTcyNSwKICAicHJvZmlsZUlkIiA6ICI4NjY3YmE3MWI4NWE0MDA0YWY1NDQ1N2E5NzM0ZWVkNyIsCiAgInByb2ZpbGVOYW1lIiA6ICJTdGV2ZSIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS82MGE1YmQwMTZiM2M5YTFiOTI3MmU0OTI5ZTMwODI3YTY3YmU0ZWJiMjE5MDE3YWRiYmM0YTRkMjJlYmQ1YjEiCiAgICB9LAogICAgIkNBUEUiIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzk1M2NhYzhiNzc5ZmU0MTM4M2U2NzVlZTJiODYwNzFhNzE2NThmMjE4MGY1NmZiY2U4YWEzMTVlYTcwZTJlZDYiCiAgICB9CiAgfQp9", "SugNJBxcOukFxb2Ab1qGukuG2F7BhYUCnBWi6DKBcWVnVn4COdpAwWHMdOLx1BXNy9El3eoDue1FbZCSeVkRWuLjV9YEjG/Xh7FeEq2vDzKlEQYWSyNEi5q+Y1Cd9RYpmIfBx8ZNUFZu0xSMqi7gXfHudlexfZlq16x+Df/Ix0688JSok6NT5sk0+8/bSCb8hdVDvh+GANiADJVexBzp43Iw/kIvyPsaomDIq0Qw4S3oWl5KxkcDNqxwfd2PnWgmeRWazy7GcYJaFdCN9RvNtHEmcpwjmlmSMG9lH1J3F6X4iLu4wWAgZkcmIUnxBe/577DBqjfxf5WV/sfb3f0PjnMgJLFpmC2SLJSEQD1bg1DIkM3pXMjIRhLr7BkuW0WddQ7qsL6zrr63NN4EYPZroIGYOKxCeXO1HzyrPpZBQ2wCCVKoG9DLTCoSN8W78HRUEU0QOIMoX8GWgNHcNHvwQ6uWcmDbPEDnYkmaPI+bBD83fCdMf5y9tK0AwK3gHfFwTB3vcGJWXl4y9px4F1Up0Nkg/e+8ORbAJSBXgBIFtrRf4LmlXM4BWZKqM8+PfWg/h2t/ZH259OCdI6vCxrw7eopUb3JzaFV99BMRAgcf7FG6jSQx1l4UwsDY0Jb2/gU8MMUo2R0tfVVZjhEIOeJTEkiQLgZ0U2T77xAWER2yuQE="))
+                sprite(Key.key("item/diamond"))
+                sprite(Key.key("chests"), Key.key("entity/chest/copper"))
+            }
+
+            println(objcts.json())
         }
 
-        print("\n\n-- Completed in $timed --\n\n")
+        println("\n-- Completed in $timed --\n\n")
 
         return timed
     }
@@ -138,10 +150,10 @@ fun main() {
         results.add(test())
     }
 
-    print("\n------------\n\nRan test 50 times:\n\n")
-    print("Average time: ${results.map { it.inWholeMicroseconds }.average() / 1000}ms\n")
-    print("Total time: ${results.sumOf { it.inWholeMicroseconds } / 1000}ms\n")
-    print("\n------------\n\nOther tests not included in timings:\n")
+    println("------------\n\nRan test 50 times:\n\n")
+    println("Average time: ${results.map { it.inWholeMicroseconds }.average() / 1000}ms\n")
+    println("Total time: ${results.sumOf { it.inWholeMicroseconds } / 1000}ms\n")
+    println("------------\n\nOther tests not included in timings:\n")
 
     /* Create reusable components */
     fun RootComponentKt.alert(message: () -> String) = buildCustomComponent {
@@ -155,8 +167,7 @@ fun main() {
         newline()
     }
 
-    print(usingComponents.json())
-    print("\n")
+    println(usingComponents.json())
 
     /* Root component */
     fun RootComponentKt.rootAlert(message: () -> String) = buildCustomRootComponent {
@@ -167,10 +178,9 @@ fun main() {
     val rootComponents = Component {
         newline()
         rootAlert { "Alert message at root" }
-        newline()
     }
 
-    print(rootComponents.json())
+    println(rootComponents.json())
 
     /* Theme test */
     fun RootComponentKt.rankPrefix(rank: String) = buildCustomRootComponent { // themes work best on root components
